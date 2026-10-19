@@ -1,6 +1,6 @@
 # code-server — VS Code in the browser (v4.141.0, Code 1.141.0, official image, persistent home, generated password). Deploy on Railway with one click.
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/TEMPLATE_CODE)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/7JO8s7)
 
 [code-server](https://github.com/coder/code-server) by [Coder](https://coder.com) (MIT) runs VS Code on a server and serves it to any browser: the full editor, integrated terminal, git, debugging and extensions from [Open VSX](https://open-vsx.org). This template runs the **official** `codercom/code-server` image at **4.141.0** (VS Code 1.141.0, released 2026-10-08), pinned by tag and digest, as a single Railway service with one volume. It needs **no deploy-time input**: open the URL, paste the generated password, and start coding.
 
