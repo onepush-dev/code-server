@@ -1,0 +1,18 @@
+# code-server 4.141.0 (VS Code in the browser) on Railway. One service, official image, one volume.
+[build]
+image = "codercom/code-server:4.141.0@sha256:72ab24b5680ee597dd647b30d82625752f40109b5f61bef90ffbf1ea1f02dbb8"
+
+[deploy]
+# Railway replaces the image ENTRYPOINT when a start command is set, so this calls upstream's
+# /usr/bin/entrypoint.sh itself. It runs as root (RAILWAY_RUN_UID=0) only to hand the root-owned
+# volume to coder (uid 1000) on first boot and seed the dotfiles from /etc/skel, then drops to
+# coder with runuser. The editor, terminals and extensions never run as root (coder still has
+# passwordless sudo, exactly like upstream's image).
+startCommand = "/bin/sh -c 'set -e; W=\"${DEFAULT_WORKSPACE:-/home/coder/workspace}\"; if [ \"$(stat -c %u /home/coder)\" != 1000 ]; then cp -an /etc/skel/. /home/coder/; chown -R 1000:1000 /home/coder; echo \"volume: /home/coder handed to coder (uid 1000)\"; fi; runuser -u coder -- mkdir -p \"$W\" \"${ENTRYPOINTD:-/home/coder/.entrypoint.d}\"; exec runuser -u coder -- /usr/bin/entrypoint.sh --bind-addr 0.0.0.0:8080 --disable-telemetry --enable-remote-storage \"$W\"'"
+# /healthz is unauthenticated and answers 200 as soon as the HTTP server is up.
+healthcheckPath = "/healthz"
+healthcheckTimeout = 120
+restartPolicyType = "ALWAYS"
+# Whole home directory: projects (workspace/), settings, extensions, config.yaml, shell history,
+# ~/.ssh, ~/.gitconfig and ~/.entrypoint.d startup scripts.
+requiredMountPath = "/home/coder"
